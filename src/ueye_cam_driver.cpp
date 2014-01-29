@@ -183,8 +183,8 @@ INT UEyeCamDriver::loadCamConfig(string filename) {
       bits_per_pixel_ = 8;
     } else {
       WARN_STREAM("Current camera color mode is not supported by this wrapper;" <<
-          "supported modes: {MONO8 | RGB8 | BAYER_RGGB8}; switching to RGB8 (24-bit)");
-      if ((is_err = setColorMode("rgb8", false)) != IS_SUCCESS) return is_err;
+          "supported modes: {MONO8 | RGB8 | BAYER_RGGB8}; switching to bayer_rggb8 (24-bit)");
+      if ((is_err = setColorMode("bayer_rggb8", false)) != IS_SUCCESS) return is_err;
     }
 
     reallocateCamBuffer();

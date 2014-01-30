@@ -52,6 +52,7 @@
 #include <sensor_msgs/fill_image.h>
 #include <sensor_msgs/image_encodings.h>
 
+#include <iomanip>
 
 //#define DEBUG_PRINTOUT_FRAME_GRAB_RATES
 
@@ -1002,13 +1003,64 @@ void UEyeCamNodelet::loadIntrinsicsFile() {
     cam_intr_filename_ = string(getenv("HOME")) + "/.ros/camera_info/" + cam_name_ + ".yaml";
   }
 
-  std::string dummyCamName;
-  if (camera_calibration_parsers::readCalibrationIni(cam_intr_filename_, dummyCamName, ros_cam_info_)) {
-    NODELET_DEBUG_STREAM("Loaded intrinsics parameters for UEye camera " << cam_name_);
+  bool read_in;
+  read_in = camera_calibration_parsers::readCalibrationIni(cam_intr_filename_, cam_name_, ros_cam_info_);
+  std::cout << cam_intr_filename_ << std::endl;
+  if (read_in) {
+    std::cout << "Intrinsik geladen :------------------------------)" << std::endl;
   }
-  ros_cam_info_.header.frame_id = "/" + cam_name_;
-};
+  else
+  {
+    std::cout << "Intrinsik nicht geladen !!!!!!!!!!!!!!!!!!!!!!1 " << std::endl;
+  }
 
+  /*
+  TEST
+ */
+  ros_cam_info_.header.frame_id = "/" + cam_name_;
+  ros_cam_info_.height = 1280;
+  ros_cam_info_.width = 960;
+  
+  ros_cam_info_.D[0] = -0.2791;
+  ros_cam_info_.D[1] = 0.3371;
+  ros_cam_info_.D[2] = -0.0002;
+  ros_cam_info_.D[3] = 0.00005;
+  ros_cam_info_.D[4] = 0;
+  
+  ros_cam_info_.K[0] = 2077.1703;
+  ros_cam_info_.K[1] = 0;
+  ros_cam_info_.K[2] = 628.99554;
+  ros_cam_info_.K[3] = 0;
+  ros_cam_info_.K[4] = 2068.4819;
+  ros_cam_info_.K[5] = 468.4645;
+  ros_cam_info_.K[6] = 0;
+  ros_cam_info_.K[7] = 0;
+  ros_cam_info_.K[8] = 1;
+  
+  ros_cam_info_.R[0] = 1;
+  ros_cam_info_.R[1] = 0;
+  ros_cam_info_.R[2] = 0;
+  ros_cam_info_.R[3] = 0;
+  ros_cam_info_.R[4] = 1;
+  ros_cam_info_.R[5] = 0;
+  ros_cam_info_.R[6] = 0;
+  ros_cam_info_.R[7] = 0;
+  ros_cam_info_.R[8] = 1;
+  
+  ros_cam_info_.P[0] =-1258.9891278;
+  ros_cam_info_.P[1] =1633.1414786;
+  ros_cam_info_.P[2] =-676.80666512;
+  ros_cam_info_.P[3] =1067035.9527;
+  ros_cam_info_.P[4] =410.18885233;
+  ros_cam_info_.P[5] =-353.17306689;
+  ros_cam_info_.P[6] =-2050.6385517;
+  ros_cam_info_.P[7] =1395080.5864;
+  ros_cam_info_.P[8] =-0.85189137916;
+  ros_cam_info_.P[9] =-0.40777265165;
+  ros_cam_info_.P[10] =-0.32863740303;
+  ros_cam_info_.P[11] =1978.601692;
+  
+};
 
 bool UEyeCamNodelet::saveIntrinsicsFile() {
   if (camera_calibration_parsers::writeCalibrationIni(cam_intr_filename_, cam_name_, ros_cam_info_)) {
